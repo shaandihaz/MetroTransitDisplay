@@ -25,12 +25,12 @@ def get_stop_info(stop_num: int) -> list:
 
 # Given the display Information from both stops, it prints the info to the terminal,
 # stopping after 6 routes are displayed
-def print_display(north_info: list, south_info: list, north_num: int, south_num: int) -> None:
-    header1 = f'Departure Information for Northbound Stop {north_num}'
+def print_display(north_info: list, south_info: list, north_num: int, south_num: int, line_width: int) -> None:
+    header1 = f'Northbound Stop {north_num}'
     print(header1, end='')
-    space = ' ' * 20
+    space = ' ' * ((line_width // 2) - len(header1))
     print(space, end=' ')
-    print(f'Departure Information for Southbound Stop {south_num}')
+    print(f'Southbound Stop {south_num}')
 
     count = 0
     for depart in range(len(min(north_info, south_info))):
@@ -38,14 +38,14 @@ def print_display(north_info: list, south_info: list, north_num: int, south_num:
             break
         route_name = north_info[depart][0] 
         #used to space out the information so it lines up
-        space = ' ' * (15 - len(route_name))
+        space = ' ' * (5 - len(route_name))
         row1 = f'Route: {route_name}{space}Arrival Time: {north_info[depart][1]}'
         print(row1, end='')
 
-        space = ' ' * (len(header1) + 20 - len(row1))
+        space = ' ' * ((line_width // 2) - len(row1))
         print(space, end=' ')
         route_name = south_info[depart][0] 
-        space = ' ' * (15 - len(route_name))
+        space = ' ' * (5 - len(route_name))
         print(f'Route: {route_name}{space}Arrival Time: {south_info[depart][1]}')
         count+=1
     
@@ -57,7 +57,8 @@ def grab_display() -> None:
         # TODO: change this to whatever command your terminal uses to clear itself.
         # commmandprompt in Windows uses cls but others might use clear or something else.
         os.system('cls')
-        print_display(north_info, south_info, northbound_stop, southbound_stop)
+        line_width = line_width = os.get_terminal_size()[0]
+        print_display(north_info, south_info, northbound_stop, southbound_stop, line_width)
         time.sleep(20)
         
 
