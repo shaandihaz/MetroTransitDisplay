@@ -30,23 +30,33 @@ def print_display(north_info: list, south_info: list, north_num: int, south_num:
     print(header1, end='')
     space = ' ' * ((line_width // 2) - len(header1))
     print(space, end=' ')
-    print(f'Southbound Stop {south_num}')
+    header2 = f'Southbound Stop {south_num}'
+    print(header2)
+    dash = '-' * (len(header1) + len(space) + len(header2))
+    print(dash)
 
     count = 0
-    for depart in range(len(min(north_info, south_info))):
+    for depart in range(min(len(north_info), len(south_info))):
         if count == 6:
             break
-        route_name = north_info[depart][0] 
-        #used to space out the information so it lines up
-        space = ' ' * (5 - len(route_name))
-        row1 = f'Route: {route_name}{space}Arrival Time: {north_info[depart][1]}'
+        if north_info:
+            route_name = north_info[depart][0] 
+            #used to space out the information so it lines up
+            space = ' ' * (5 - len(route_name))
+            row1 = f'Route: {route_name}{space}|{north_info[depart][1]}'
+            
+        else:
+            row1 = '----------'
+        
         print(row1, end='')
-
         space = ' ' * ((line_width // 2) - len(row1))
         print(space, end=' ')
-        route_name = south_info[depart][0] 
-        space = ' ' * (5 - len(route_name))
-        print(f'Route: {route_name}{space}Arrival Time: {south_info[depart][1]}')
+        if south_info:
+            route_name = south_info[depart][0] 
+            space = ' ' * (5 - len(route_name))
+            print(f'Route: {route_name}{space}|{south_info[depart][1]}')
+        else:
+            print('----------')
         count+=1
     
 # runs the loop to display the bus schedule for the 2 stops. 
@@ -56,7 +66,7 @@ def grab_display() -> None:
         south_info= get_stop_info(southbound_stop)
         # TODO: change this to whatever command your terminal uses to clear itself.
         # commmandprompt in Windows uses cls but others might use clear or something else.
-        os.system('cls')
+        os.system('clear')
         line_width = line_width = os.get_terminal_size()[0]
         print_display(north_info, south_info, northbound_stop, southbound_stop, line_width)
         time.sleep(20)
