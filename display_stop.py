@@ -1,7 +1,7 @@
 import requests
 import time
 import os
-
+import datetime
 # REPLACE THESE WITH THE DESIRED STOP NUMBERS 
 northbound_stop = 0000
 southbound_stop = 0000
@@ -62,6 +62,10 @@ def print_display(north_info: list, south_info: list, north_num: int, south_num:
 # runs the loop to display the bus schedule for the 2 stops. 
 def grab_display() -> None:
     while(True):
+        hour = datetime.datetime.now().hour
+        if hour >= 23 or hour <= 6:
+            print('Will not request data between 11pm and 7am')
+            continue
         north_info = get_stop_info(northbound_stop)
         south_info= get_stop_info(southbound_stop)
         # TODO: change this to whatever command your terminal uses to clear itself.
